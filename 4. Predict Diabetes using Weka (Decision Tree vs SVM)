@@ -1,0 +1,11 @@
+
+Steps:
+Load the diabetes dataset in Weka (e.g., CSV or ARFF).
+
+Apply J48 (Decision Tree) in the Classify tab.
+
+Apply SMO (Support Vector Machine).
+
+Compare accuracy and F1-score using the results.
+
+Use Weka's graph visualization to plot results.

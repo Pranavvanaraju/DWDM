@@ -1,0 +1,15 @@
+data <- c(200, 300, 400, 600, 1000)
+
+# Min-Max Normalization
+min_max <- (data - min(data)) / (max(data) - min(data))
+print(min_max)
+
+# Z-Score Normalization (Using Mean Absolute Deviation)
+mean_abs_dev <- mean(abs(data - mean(data)))
+z_score <- (data - mean(data)) / mean_abs_dev
+print(z_score)
+
+# Decimal Scaling Normalization
+scaling_factor <- 10^ceiling(log10(max(abs(data))))
+decimal_scaling <- data / scaling_factor
+print(decimal_scaling)

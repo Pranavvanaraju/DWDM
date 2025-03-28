@@ -1,0 +1,10 @@
+library(rpart)
+factory_data <- data.frame(
+  Economy = c("Good", "Bad"),
+  Revenue = c(7, 3),
+  Expand = c("Yes", "No")
+)
+
+tree_model <- rpart(Expand ~ Economy, data=factory_data, method="class")
+plot(tree_model)
+text(tree_model)

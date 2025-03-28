@@ -1,0 +1,290 @@
+#1 Create an ARFF file for the given transaction table and implement Apriori and FP-Growth algorithms with min support=2 and confidence=50%, then compare the rules.
+
+@RELATION transactions
+
+@ATTRIBUTE items {SONY,BPL,LG,SAMSUNG,ONIDA}
+
+@DATA
+SONY,BPL,LG
+BPL,SAMSUNG
+BPL,ONIDA
+SONY,BPL,SAMSUNG
+SONY,ONIDA
+BPL,ONIDA
+SONY,ONIDA
+SONY,BPL,ONIDA,LG
+SONY,BPL,ONIDA
+
+#2 Perform different normalizations on strike rates: 100, 70, 60, 90, 90.
+strike_rates <- c(100, 70, 60, 90, 90)
+
+# (a) Min-Max normalization
+min_max <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+min_max_norm <- min_max(strike_rates)
+
+# (b) z-score normalization
+z_score_norm <- scale(strike_rates)
+
+# (c) z-score with mean absolute deviation
+mad <- mean(abs(strike_rates - mean(strike_rates)))
+mad_norm <- (strike_rates - mean(strike_rates)) / mad
+
+# (d) decimal scaling
+decimal_scale <- function(x) {
+  x / (10^ceiling(log10(max(abs(x)))))
+}
+decimal_norm <- decimal_scale(strike_rates)
+
+results <- data.frame(
+  Original = strike_rates,
+  MinMax = min_max_norm,
+  ZScore = z_score_norm,
+  ZScore_MAD = mad_norm,
+  Decimal = decimal_norm
+)
+print(results)
+
+#3 Normalize age value 35 using different methods.
+age <- c(23,23,27,27,39,41,47,49,50,52,54,54,56,57,58,58,60,61)
+min_max_35 <- (35 - min(age)) / (max(age) - min(age))
+z_score_35 <- (35 - mean(age)) / 12.94
+decimal_35 <- 35 / 100  # since max is 61, we use 10^2=100
+
+#4 Analyze age and %fat data with mean, median, SD, boxplots, and plots.
+age <- c(23,23,27,27,39,41,47,49,50,52,54,54,56,57,58,58,60,61)
+fat <- c(9.5,26.5,7.8,17.8,31.4,25.9,27.4,27.2,31.2,34.6,42.5,28.8,33.4,30.2,34.1,32.9,41.2,35.7)
+
+# (a) Descriptive statistics
+age_mean <- mean(age)
+age_median <- median(age)
+age_sd <- sd(age)
+
+fat_mean <- mean(fat)
+fat_median <- median(fat)
+fat_sd <- sd(fat)
+
+# (b) Boxplots
+par(mfrow=c(1,2))
+boxplot(age, main="Age Boxplot")
+boxplot(fat, main="%Fat Boxplot")
+
+# (c) Scatter plot and Q-Q plot
+plot(age, fat, main="Age vs %Fat Scatterplot")
+qqnorm(age); qqline(age)
+qqnorm(fat); qqline(fat)
+
+#5 Calculate SD and variance for AvgSpeed and TotalTime.
+AvgSpeed: 78, 81, 82, 74, 83, 82, 77, 80
+TotalTime: 39, 37, 36, 42, 35, 36, 40, 38
+
+AvgSpeed SD = sqrt(variance) ≈ 2.92
+AvgSpeed Variance ≈ 8.5
+
+TotalTime SD ≈ 2.29
+TotalTime Variance ≈ 5.25
+
+#6 Partition sales prices (5,10,11,13,15,35,50,55,72,92,204,215) into bins.
+prices <- c(5,10,11,13,15,35,50,55,72,92,204,215)
+
+# (a) Equal-frequency (3 bins)
+bin_ef <- cut(prices, breaks=3, labels=c("Low","Medium","High"))
+
+# (b) Equal-width
+bin_ew <- cut(prices, breaks=seq(min(prices), max(prices), length.out=4), 
+             labels=c("Low","Medium","High"))
+
+# (c) Clustering
+kmeans_result <- kmeans(matrix(prices, ncol=1), centers=3)
+bin_cluster <- factor(kmeans_result$cluster)
+
+results <- data.frame(Price=prices, EqualFreq=bin_ef, 
+                     EqualWidth=bin_ew, Cluster=bin_cluster)
+print(results)
+
+#7 Draw decision tree for factory expansion scenario.
+Decision Node: Expand Factory?
+- Expand (Cost $2M)
+  - Good Economy (45%): $7M revenue → $5M net
+  - Bad Economy (55%): $3M revenue → $1M net
+  - Expected value: 0.45*5 + 0.55*1 = $2.25M + $0.55M = $2.8M
+- Don't Expand
+  - Good Economy (45%): $4M revenue
+  - Bad Economy (55%): $1.5M revenue
+  - Expected value: 0.45*4 + 0.55*1.5 = $1.8M + $0.825M = $2.625M
+
+Recommendation: Expand factory (higher expected value)
+
+#8 Perform clustering analysis on mall customer data.
+# Sample data
+customer_data <- data.frame(
+  CustomerID = 0:4,
+  Gender = c("Male","Male","Female","Female","Female"),
+  Age = c(19,21,20,23,31),
+  AnnualIncome = c(15,15,16,16,17),
+  SpendingScore = c(39,81,6,77,40)
+)
+
+# Cluster analysis
+library(cluster)
+# Using Annual Income and Spending Score
+cluster_data <- customer_data[,c("AnnualIncome","SpendingScore")]
+kmeans_result <- kmeans(cluster_data, centers=5)
+
+# Plot clusters
+plot(cluster_data, col=kmeans_result$cluster, pch=19, 
+     main="Customer Segmentation")
+points(kmeans_result$centers, col=1:5, pch=8, cex=2)
+
+#9 Create ARFF file and compare Naive Bayes with Decision Tree.
+@RELATION PlayTennis
+
+@ATTRIBUTE Outlook {Sunny,Overcast,Rain}
+@ATTRIBUTE Temperature {Hot,Mild,Cool}
+@ATTRIBUTE Humidity {High,Normal}
+@ATTRIBUTE Wind {Weak,Strong}
+@ATTRIBUTE PlayTennis {Yes,No}
+
+@DATA
+Sunny,Hot,High,Weak,No
+Sunny,Hot,High,Strong,No
+Overcast,Hot,High,Weak,Yes
+Rain,Mild,High,Weak,Yes
+Rain,Cool,Normal,Weak,Yes
+Rain,Cool,Normal,Strong,No
+Overcast,Cool,Normal,Strong,Yes
+Sunny,Mild,High,Weak,No
+Sunny,Cool,Normal,Weak,Yes
+Rain,Mild,Normal,Weak,Yes
+Sunny,Mild,Normal,Strong,Yes
+Overcast,Mild,High,Strong,Yes
+Overcast,Hot,Normal,Weak,Yes
+Rain,Mild,High,Strong,No
+
+#10 Create scatterplot and bar chart for Blood Pressure vs Age.
+# Assuming diabetes.csv is loaded
+diabetes <- read.csv("diabetes.csv")
+
+# Scatterplot
+plot(diabetes$Age, diabetes$BloodPressure, 
+     xlab="Age", ylab="Blood Pressure",
+     main="Blood Pressure vs Age")
+
+# Bar chart
+age_groups <- cut(diabetes$Age, breaks=seq(20,80,by=10))
+bp_means <- aggregate(diabetes$BloodPressure, by=list(age_groups), FUN=mean)
+barplot(bp_means$x, names.arg=bp_means$Group.1,
+        xlab="Age Group", ylab="Average Blood Pressure")
+
+#11 Analyze linear relation between mortality and hardness in water dataset.
+data(water) # Assuming water dataset is available
+
+# Scatter plot
+plot(water$hardness, water$mortality,
+     xlab="Water Hardness", ylab="Mortality Rate",
+     main="Mortality vs Water Hardness")
+
+# Linear regression
+model <- lm(mortality ~ hardness, data=water)
+abline(model, col="red")
+
+# Predict for hardness=88
+predicted <- predict(model, newdata=data.frame(hardness=88))
+print(predicted)
+
+#12 Partition the following sorted marks into three bins using different methods and plot histograms in R: 55, 60, 71, 63, 55, 65, 50, 55, 58, 59, 61, 63, 65, 67, 71, 72, 75
+
+marks <- c(55, 60, 71, 63, 55, 65, 50, 55, 58, 59, 61, 63, 65, 67, 71, 72, 75)
+
+# (a) Equal-frequency partitioning
+num_bins <- 3
+bin_size <- ceiling(length(marks)/num_bins)
+equal_freq <- cut(marks, breaks=quantile(marks, probs=seq(0,1,length.out=num_bins+1)), 
+                include.lowest=TRUE, labels=c("Low","Medium","High"))
+
+# (b) Equal-width partitioning
+equal_width <- cut(marks, breaks=seq(min(marks), max(marks), length.out=num_bins+1), 
+                 include.lowest=TRUE, labels=c("Low","Medium","High"))
+
+# (c) Clustering
+set.seed(123)
+kmeans_result <- kmeans(matrix(marks, ncol=1), centers=3)
+clusters <- factor(kmeans_result$cluster, labels=c("Low","Medium","High"))
+
+# Create histograms
+par(mfrow=c(2,2))
+hist(marks, main="Original Marks", xlab="Marks")
+hist(marks[equal_freq=="Low"], breaks=5, main="Equal-Frequency Low", xlab="Marks")
+hist(marks[equal_width=="Medium"], breaks=5, main="Equal-Width Medium", xlab="Marks")
+hist(marks[clusters=="High"], breaks=5, main="Clustering High", xlab="Marks")
+
+# Show bin assignments
+result_df <- data.frame(Marks=marks, EqualFrequency=equal_freq, 
+                       EqualWidth=equal_width, Clustering=clusters)
+print(result_df)
+
+#13 Analyze the given decision tree for gender prediction based on height and weight:
+a) Create ARFF Dataset and Calculate Accuracy
+
+@RELATION gender_prediction
+
+@ATTRIBUTE height NUMERIC
+@ATTRIBUTE weight NUMERIC
+@ATTRIBUTE gender {Male,Female}
+
+@DATA
+185,85,Male
+185,75,Female
+175,90,Female
+190,95,Male
+170,65,Female
+182,82,Male
+178,78,Female
+185,79,Female
+
+b) R Code for Accuracy Calculation:
+# Sample dataset
+data <- data.frame(
+  height = c(185, 185, 175, 190, 170, 182, 178, 185),
+  weight = c(85, 75, 90, 95, 65, 82, 78, 79),
+  gender = c("Male", "Female", "Female", "Male", "Female", "Male", "Female", "Female"),
+  stringsAsFactors = TRUE
+)
+
+# Implement decision tree rules
+predict_gender <- function(height, weight) {
+  if(height > 180) {
+    if(weight > 80) {
+      return("Male")
+    } else {
+      return("Female")
+    }
+  } else {
+    return("Female")
+  }
+}
+
+# Make predictions
+predicted <- mapply(predict_gender, data$height, data$weight)
+
+# Calculate accuracy
+accuracy <- mean(predicted == data$gender)
+print(paste("Accuracy:", round(accuracy*100, 2), "%"))
+
+# Confusion matrix
+conf_matrix <- table(Predicted=predicted, Actual=data$gender)
+print(conf_matrix)
+
+c) Algorithm Comparison and Confusion Matrix
+# Plot confusion matrix
+library(caret)
+confusionMatrix(data=factor(predicted), reference=data$gender)
+
+# Plot decision boundaries
+library(ggplot2)
+ggplot(data, aes(x=height, y=weight, color=gender)) +
+  geom_point(size=3) +
+  geom_vline(xintercept=180, linetype="dashed") +
+  geom_hline(data=subset(data, height>180), aes(yintercept=80), linetype="dashed") +
+  labs(title="Decision Boundaries for Gender Prediction")

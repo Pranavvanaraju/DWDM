@@ -1,0 +1,8 @@
+Steps:
+Convert the decision tree dataset into ARFF format.
+
+Load it into Weka.
+
+Use J48 classifier.
+
+Generate rules and compare results.

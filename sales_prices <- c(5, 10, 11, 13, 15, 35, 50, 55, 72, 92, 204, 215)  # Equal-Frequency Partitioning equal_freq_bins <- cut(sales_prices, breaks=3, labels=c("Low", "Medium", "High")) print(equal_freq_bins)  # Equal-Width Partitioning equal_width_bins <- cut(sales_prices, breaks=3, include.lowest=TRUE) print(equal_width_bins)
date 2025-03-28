@@ -1,0 +1,9 @@
+sales_prices <- c(5, 10, 11, 13, 15, 35, 50, 55, 72, 92, 204, 215)
+
+# Equal-Frequency Partitioning
+equal_freq_bins <- cut(sales_prices, breaks=3, labels=c("Low", "Medium", "High"))
+print(equal_freq_bins)
+
+# Equal-Width Partitioning
+equal_width_bins <- cut(sales_prices, breaks=3, include.lowest=TRUE)
+print(equal_width_bins)

@@ -1,0 +1,11 @@
+
+Steps:
+Convert the given dataset into ARFF format.
+
+Open Weka, load the dataset.
+
+Select Apriori from the Associations tab.
+
+Set Minimum Support = 2.
+
+Click Start to generate association rules.

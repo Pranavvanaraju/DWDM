@@ -1,0 +1,15 @@
+avg_speed <- c(78, 81, 82, 74, 83, 82, 77, 80)
+total_time <- c(39, 37, 36, 42, 35, 36, 40, 38)
+
+# Standard Deviation
+sd_avg_speed <- sd(avg_speed)
+sd_total_time <- sd(total_time)
+
+# Variance
+var_avg_speed <- var(avg_speed)
+var_total_time <- var(total_time)
+
+print(paste("Standard Deviation of Avg Speed:", sd_avg_speed))
+print(paste("Standard Deviation of Total Time:", sd_total_time))
+print(paste("Variance of Avg Speed:", var_avg_speed))
+print(paste("Variance of Total Time:", var_total_time))

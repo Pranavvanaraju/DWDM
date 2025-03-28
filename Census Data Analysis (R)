@@ -1,0 +1,14 @@
+set.seed(123)
+age <- sample(1:100, 50, replace = TRUE)
+tumor_size <- sample(1:10, 50, replace = TRUE)
+
+data <- data.frame(Age = age, TumorSize = tumor_size)
+
+# Histogram
+hist(data$Age, col="blue", main="Age Distribution", xlab="Age")
+
+# Scatter Plot
+plot(data$Age, data$TumorSize, main="Scatter Plot of Tumor Size vs Age", xlab="Age", ylab="Tumor Size", col="red", pch=16)
+
+# Boxplot
+boxplot(data$TumorSize ~ cut(data$Age, breaks=5), main="Boxplot of Tumor Size", xlab="Age Groups", ylab="Tumor Size", col="green")

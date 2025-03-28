@@ -1,0 +1,10 @@
+# Example data
+hardness <- c(50, 60, 70, 80, 90, 100)
+mortality <- c(200, 190, 180, 160, 140, 120)
+
+# Fit linear model
+model <- lm(mortality ~ hardness)
+
+# Predict mortality for hardness=88
+predicted_mortality <- predict(model, data.frame(hardness=88))
+print(predicted_mortality)

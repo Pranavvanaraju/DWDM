@@ -1,0 +1,13 @@
+# Create a data frame
+persons <- data.frame(
+  Name = c("Gopu", "Babu", "Baby", "Gopal", "Krishna", "Jai", "Dev", "Malini", "Hema", "Anu"),
+  Vegetarian = c("yes", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes")
+)
+
+# Count vegetarians and non-vegetarians
+veg_count <- sum(persons$Vegetarian == "yes")
+non_veg_count <- sum(persons$Vegetarian == "no")
+
+# Display results
+cat("Vegetarians:", veg_count, "\n")
+cat("Non-Vegetarians:", non_veg_count, "\n")
